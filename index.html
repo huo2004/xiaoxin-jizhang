@@ -772,6 +772,162 @@ body {
 /* ============ Scrollbar ============ */
 ::-webkit-scrollbar { width: 0; }
 
+/* ============ Transfer ============ */
+.type-btn.active-transfer {
+  background: #EDE0F5;
+  border-color: #C8B0E0;
+  color: #7B5EA7;
+}
+
+.transfer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.transfer-row .transfer-arrow {
+  font-size: 20px;
+  color: var(--text-lighter);
+  flex-shrink: 0;
+}
+
+.transfer-row .account-select-wrap {
+  flex: 1;
+}
+
+/* ============ Account Select ============ */
+.account-select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: all 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%238C827E'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.account-select:focus {
+  border-color: var(--pink);
+  background-color: var(--white);
+}
+
+/* ============ Account Cards ============ */
+.account-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.account-card {
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.account-card:active {
+  transform: scale(0.96);
+}
+
+.account-card.selected {
+  border-color: var(--pink);
+  background: var(--pink-light);
+}
+
+.account-card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.account-card-icon {
+  font-size: 24px;
+}
+
+.account-card-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.account-card-balance {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.account-card-balance.positive { color: var(--mint-dark); }
+.account-card-balance.negative { color: var(--orange); }
+.account-card-balance.zero { color: var(--text-light); }
+
+.account-card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.account-card-actions .btn {
+  flex: 1;
+  font-size: 11px;
+  padding: 6px 10px;
+}
+
+/* ============ Add Account Button ============ */
+.add-account-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 14px;
+  border: 2px dashed var(--text-lighter);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-lighter);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.add-account-btn:hover {
+  border-color: var(--pink);
+  color: var(--pink-dark);
+}
+
+/* ============ Edit Actions ============ */
+.edit-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-actions .btn-secondary {
+  flex-shrink: 0;
+}
+
+/* ============ Transfer Bill ============ */
+.txn-item.transfer .txn-amount {
+  color: #9B8EC0;
+}
+
+.txn-icon.transfer-bg {
+  background: #EDE0F5;
+}
+
 /* ============ Responsive ============ */
 @media (min-width: 481px) {
   body {
@@ -841,6 +997,26 @@ body {
         <div class="type-toggle" id="typeToggle">
           <div class="type-btn active-expense" data-type="expense">💸 支出</div>
           <div class="type-btn" data-type="income">💰 收入</div>
+          <div class="type-btn" data-type="transfer">💱 转账</div>
+        </div>
+      </div>
+
+      <!-- Account Select (income/expense) -->
+      <div class="form-group" id="accountSelectGroup">
+        <label class="form-label">🏦 账户</label>
+        <select class="account-select" id="inputAccount"></select>
+      </div>
+
+      <!-- Transfer Accounts -->
+      <div class="transfer-row" id="transferAccountsRow" style="display:none;">
+        <div class="account-select-wrap">
+          <label class="form-label">📤 转出账户</label>
+          <select class="account-select" id="inputFromAccount"></select>
+        </div>
+        <span class="transfer-arrow" style="margin-top:18px;">➡️</span>
+        <div class="account-select-wrap">
+          <label class="form-label">📥 转入账户</label>
+          <select class="account-select" id="inputToAccount"></select>
         </div>
       </div>
 
@@ -850,8 +1026,8 @@ body {
         <input type="number" class="form-input" id="inputAmount" placeholder="0.00" step="0.01" min="0.01" inputmode="decimal" style="font-size:28px;font-weight:800;text-align:center;">
       </div>
 
-      <!-- Category -->
-      <div class="form-group">
+      <!-- Category (hidden for transfer) -->
+      <div class="form-group" id="categoryGroup">
         <label class="form-label">🏷️ 分类</label>
         <div class="category-chips" id="categoryChips"></div>
       </div>
@@ -868,15 +1044,18 @@ body {
         <input type="date" class="form-input" id="inputDate">
       </div>
 
-      <button class="btn btn-primary" onclick="saveRecord()">
-        <span>✨</span> 记一笔 <span>✨</span>
-      </button>
+      <div id="recordActions">
+        <button class="btn btn-primary" onclick="saveRecord()">
+          <span>✨</span> 记一笔 <span>✨</span>
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- ========== Stats Page ========== -->
   <div class="page" id="page-stats">
     <div class="stats-period" id="periodBtns">
+      <button class="period-btn" data-period="day">📋 今日</button>
       <button class="period-btn active" data-period="week">📅 本周</button>
       <button class="period-btn" data-period="month">📆 本月</button>
       <button class="period-btn" data-period="year">📊 今年</button>
@@ -895,6 +1074,12 @@ body {
 
   <!-- ========== Mine Page (Budget + Search) ========== -->
   <div class="page" id="page-mine">
+    <!-- Account Management -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom:12px;">🏦 账户管理</div>
+      <div id="accountList"></div>
+    </div>
+
     <!-- Budget Setting -->
     <div class="card">
       <div class="card-title" style="margin-bottom:12px;">🎯 月度预算设置</div>
@@ -915,6 +1100,7 @@ body {
         <button class="filter-chip active" data-filter="all" onclick="setFilter('all', this)">全部</button>
         <button class="filter-chip" data-filter="expense" onclick="setFilter('expense', this)">💸 支出</button>
         <button class="filter-chip" data-filter="income" onclick="setFilter('income', this)">💰 收入</button>
+        <button class="filter-chip" data-filter="transfer" onclick="setFilter('transfer', this)">💱 转账</button>
         <button class="filter-chip" data-filter="month" onclick="setFilter('month', this)">📆 本月</button>
       </div>
       <div id="searchResults"></div>
@@ -967,6 +1153,13 @@ body {
 // ============ Constants ============
 const STORAGE_KEY = 'xiaoxin_bills';
 const BUDGET_KEY = 'xiaoxin_budget';
+const ACCOUNT_KEY = 'xiaoxin_accounts';
+const DEFAULT_ACCOUNTS = [
+  { id: 'a_cash', name: '现金', icon: '💵', initialBalance: 0 },
+  { id: 'a_bank', name: '银行卡', icon: '🏦', initialBalance: 0 },
+  { id: 'a_alipay', name: '支付宝', icon: '💙', initialBalance: 0 },
+  { id: 'a_wechat', name: '微信', icon: '💚', initialBalance: 0 }
+];
 const CATEGORIES = {
   income:  ['💰 工资', '🎁 奖金', '📈 理财', '🧧 红包', '💝 兼职', '🛍️ 退款', '📦 其他'],
   expense: ['🍔 餐饮', '🚇 交通', '🛒 购物', '🎮 娱乐', '🏠 居住', '💊 医疗', '📚 教育', '👗 服饰', '💄 美妆', '📦 其他']
@@ -979,20 +1172,24 @@ const CATEGORY_ICONS = {
 
 // ============ State ============
 let bills = [];
+let accounts = [];
 let currentTab = 'home';
 let recordType = 'expense';
 let selectedCategory = null;
 let searchFilter = 'all';
 let charts = {};
+let editingBillId = null;
 function getToday() { return dayjs(); }
 
 // ============ Init ============
 function init() {
   loadData();
+  loadAccounts();
   updateHeaderDate();
   setupTypeToggle();
   renderCategoryChips();
   setTodayDate();
+  renderAccountSelects();
   renderAll();
   setupNavListeners();
   setupPeriodButtons();
@@ -1010,6 +1207,36 @@ function loadData() {
 
 function saveData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(bills));
+}
+
+function loadAccounts() {
+  try {
+    accounts = JSON.parse(localStorage.getItem(ACCOUNT_KEY) || 'null');
+    if (!accounts || !accounts.length) { initDefaultAccounts(); }
+  } catch(e) { initDefaultAccounts(); }
+}
+function saveAccounts() { localStorage.setItem(ACCOUNT_KEY, JSON.stringify(accounts)); }
+
+function initDefaultAccounts() {
+  accounts = DEFAULT_ACCOUNTS.map(a => ({...a, createdAt: new Date().toISOString()}));
+  saveAccounts();
+}
+
+function getAccountBalance(accountId) {
+  let balance = 0;
+  const acc = accounts.find(a => a.id === accountId);
+  if (acc) balance = acc.initialBalance || 0;
+  bills.forEach(b => {
+    if (b.type === 'income' && b.accountId === accountId) balance += b.amount;
+    if (b.type === 'expense' && b.accountId === accountId) balance -= b.amount;
+    if (b.type === 'transfer' && b.toAccountId === accountId) balance += b.amount;
+    if (b.type === 'transfer' && b.fromAccountId === accountId) balance -= b.amount;
+  });
+  return Math.round(balance * 100) / 100;
+}
+
+function getTotalBalance() {
+  return Math.round(accounts.reduce((s, a) => s + getAccountBalance(a.id), 0) * 100) / 100;
 }
 
 function getBudget() {
@@ -1042,26 +1269,16 @@ function setupNavListeners() {
 
 function switchTab(tab) {
   currentTab = tab;
-  // Update pages
+  if (tab !== 'record') { cancelEdit(); }
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const page = document.getElementById('page-' + tab);
   if (page) page.classList.add('active');
-
-  // Update nav
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const navItems = document.querySelectorAll('.nav-item[data-tab="' + tab + '"]');
-  navItems.forEach(n => n.classList.add('active'));
-
-  // Re-render relevant
+  document.querySelectorAll('.nav-item[data-tab="' + tab + '"]').forEach(n => n.classList.add('active'));
   if (tab === 'home') renderHome();
   if (tab === 'stats') renderStats();
   if (tab === 'mine') renderMine();
-  if (tab === 'record') {
-    setTodayDate();
-    renderCategoryChips();
-  }
-
-  // Scroll to top
+  if (tab === 'record') { setTodayDate(); renderCategoryChips(); renderAccountSelects(); }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1080,25 +1297,31 @@ function setupTypeToggle() {
     btn.addEventListener('click', function() {
       recordType = this.dataset.type;
       document.querySelectorAll('#typeToggle .type-btn').forEach(b => {
-        b.classList.remove('active-expense', 'active-income');
+        b.classList.remove('active-expense', 'active-income', 'active-transfer');
       });
       this.classList.add('active-' + recordType);
       selectedCategory = null;
       renderCategoryChips();
+      renderAccountSelects();
     });
   });
 }
 
 // ============ Category Chips ============
 function renderCategoryChips() {
-  const cats = CATEGORIES[recordType];
+  const group = document.getElementById('categoryGroup');
   const container = document.getElementById('categoryChips');
+  if (recordType === 'transfer') {
+    group.style.display = 'none';
+    return;
+  }
+  group.style.display = '';
+  const cats = CATEGORIES[recordType];
   let html = '';
   cats.forEach(cat => {
     const sel = selectedCategory === cat ? ' selected-' + recordType : '';
     html += `<span class="category-chip${sel}" onclick="selectCategory('${cat}', this)">${cat}</span>`;
   });
-  // Add custom category option
   html += `<span class="category-chip" onclick="addCustomCategory()" style="border:2px dashed var(--text-lighter);background:transparent;">+ 自定义</span>`;
   container.innerHTML = html;
 }
@@ -1130,6 +1353,35 @@ function addCustomCategory() {
   }
 }
 
+// ============ Account Selects ============
+function renderAccountSelects() {
+  const selEl = document.getElementById('inputAccount');
+  if (selEl) {
+    let html = '<option value="">选择账户...</option>';
+    accounts.forEach(a => {
+      const bal = getAccountBalance(a.id);
+      html += `<option value="${a.id}">${a.icon} ${a.name} (${bal >= 0 ? '+' : ''}${bal.toFixed(2)})</option>`;
+    });
+    selEl.innerHTML = html;
+  }
+  const fromEl = document.getElementById('inputFromAccount');
+  const toEl = document.getElementById('inputToAccount');
+  if (fromEl && toEl) {
+    let opts = '<option value="">选择账户...</option>';
+    accounts.forEach(a => {
+      opts += `<option value="${a.id}">${a.icon} ${a.name}</option>`;
+    });
+    fromEl.innerHTML = opts;
+    toEl.innerHTML = opts;
+  }
+  const accGroup = document.getElementById('accountSelectGroup');
+  const transferRow = document.getElementById('transferAccountsRow');
+  if (accGroup && transferRow) {
+    accGroup.style.display = recordType === 'transfer' ? 'none' : '';
+    transferRow.style.display = recordType === 'transfer' ? '' : 'none';
+  }
+}
+
 // ============ Date ============
 function setTodayDate() {
   document.getElementById('inputDate').value = getToday().format('YYYY-MM-DD');
@@ -1144,48 +1396,194 @@ function saveRecord() {
     document.getElementById('inputAmount').focus();
     return;
   }
-  if (!selectedCategory) {
-    showToast('请选择一个分类哦～ 🏷️');
-    return;
-  }
   const note = document.getElementById('inputNote').value.trim();
   const date = document.getElementById('inputDate').value || getToday().format('YYYY-MM-DD');
+  let billData = { amount: Math.round(amount * 100) / 100, note, date };
 
-  const bill = {
-    id: Date.now(),
-    type: recordType,
-    amount: Math.round(amount * 100) / 100,
-    category: selectedCategory,
-    note: note,
-    date: date,
-    createdAt: new Date().toISOString()
-  };
+  if (recordType === 'transfer') {
+    const fromId = document.getElementById('inputFromAccount').value;
+    const toId = document.getElementById('inputToAccount').value;
+    if (!fromId || !toId) { showToast('请选择转出和转入账户哦～ 🏦'); return; }
+    if (fromId === toId) { showToast('转出和转入账户不能相同哦～ 🐱'); return; }
+    billData.type = 'transfer';
+    billData.fromAccountId = fromId;
+    billData.toAccountId = toId;
+    billData.category = '💱 转账';
+    billData.accountId = fromId;
+  } else {
+    if (!selectedCategory) { showToast('请选择一个分类哦～ 🏷️'); return; }
+    const accId = document.getElementById('inputAccount').value;
+    if (!accId) { showToast('请选择账户哦～ 🏦'); return; }
+    billData.type = recordType;
+    billData.category = selectedCategory;
+    billData.accountId = accId;
+  }
 
-  bills.unshift(bill);
+  if (editingBillId) {
+    const idx = bills.findIndex(b => b.id === editingBillId);
+    if (idx >= 0) { bills[idx] = { ...bills[idx], ...billData }; showToast('账单已更新！✏️'); }
+    cancelEdit();
+  } else {
+    billData.id = Date.now();
+    billData.createdAt = new Date().toISOString();
+    bills.unshift(billData);
+    const label = recordType === 'transfer' ? '💱 转账' : (recordType === 'income' ? '💰 收入 +' : '💸 支出 -');
+    showToast('记账成功！' + label + amount.toFixed(2));
+  }
+
   saveData();
-
-  // Reset form
   document.getElementById('inputAmount').value = '';
   document.getElementById('inputNote').value = '';
   selectedCategory = null;
   renderCategoryChips();
   setTodayDate();
-
-  // Animate
-  const btn = document.querySelector('#page-record .btn-primary');
-  btn.style.transform = 'scale(0.9)';
-  setTimeout(() => { btn.style.transform = ''; }, 150);
-
-  showToast('记账成功！' + (recordType === 'income' ? '💰 收入 +' : '💸 支出 -') + amount.toFixed(2));
+  renderAccountSelects();
   renderAll();
   checkBudgetAlert();
+}
+
+// ============ Edit Bill ============
+function editBill(id) {
+  const bill = bills.find(b => b.id === id);
+  if (!bill) return;
+  editingBillId = id;
+  switchTab('record');
+  recordType = bill.type;
+  document.querySelectorAll('#typeToggle .type-btn').forEach(b => {
+    b.classList.remove('active-expense', 'active-income', 'active-transfer');
+  });
+  const activeBtn = document.querySelector(`#typeToggle .type-btn[data-type="${bill.type}"]`);
+  if (activeBtn) activeBtn.classList.add('active-' + bill.type);
+  document.getElementById('inputAmount').value = bill.amount;
+  document.getElementById('inputNote').value = bill.note || '';
+  document.getElementById('inputDate').value = bill.date;
+  selectedCategory = bill.type !== 'transfer' ? bill.category : null;
+  renderCategoryChips();
+  renderAccountSelects();
+  setTimeout(() => {
+    if (bill.type === 'transfer') {
+      const fromEl = document.getElementById('inputFromAccount');
+      const toEl = document.getElementById('inputToAccount');
+      if (fromEl) fromEl.value = bill.fromAccountId || '';
+      if (toEl) toEl.value = bill.toAccountId || '';
+    } else {
+      const accEl = document.getElementById('inputAccount');
+      if (accEl) accEl.value = bill.accountId || '';
+    }
+  }, 100);
+  document.getElementById('recordActions').innerHTML = `
+    <div class="edit-actions">
+      <button class="btn btn-primary" onclick="saveRecord()" style="flex:1;"><span>✏️</span> 更新账单 <span>✏️</span></button>
+      <button class="btn btn-secondary" onclick="cancelEdit()">❌ 取消</button>
+    </div>`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function cancelEdit() {
+  editingBillId = null;
+  document.getElementById('inputAmount').value = '';
+  document.getElementById('inputNote').value = '';
+  selectedCategory = null;
+  setTodayDate();
+  renderCategoryChips();
+  renderAccountSelects();
+  document.getElementById('recordActions').innerHTML = `
+    <button class="btn btn-primary" onclick="saveRecord()"><span>✨</span> 记一笔 <span>✨</span></button>`;
 }
 
 // ============ Render All ============
 function renderAll() {
   renderHome();
+  renderAccountList();
   if (currentTab === 'stats') renderStats();
   if (currentTab === 'mine') renderMine();
+}
+
+// ============ Account List ============
+function renderAccountList() {
+  const container = document.getElementById('accountList');
+  if (!container) return;
+  const totalBal = getTotalBalance();
+  let html = '<div class="account-grid">';
+  accounts.forEach(a => {
+    const bal = getAccountBalance(a.id);
+    let cls = bal > 0 ? 'positive' : (bal < 0 ? 'negative' : 'zero');
+    html += `
+      <div class="account-card" onclick="editAccount('${a.id}')">
+        <div class="account-card-top"><span class="account-card-icon">${a.icon}</span><span class="account-card-name">${a.name}</span></div>
+        <div class="account-card-balance ${cls}">${bal >= 0 ? '+' : ''}${bal.toFixed(2)}</div>
+        <div class="account-card-actions">
+          <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();editAccount('${a.id}')">✏️</button>
+          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteAccount('${a.id}')">🗑️</button>
+        </div>
+      </div>`;
+  });
+  html += '</div>';
+  html += `<button class="add-account-btn" onclick="addAccount()">+ 添加账户</button>`;
+  html += `<div style="text-align:center;margin-top:8px;font-size:13px;color:var(--text-light);">总资产：<b style="color:${totalBal >= 0 ? 'var(--mint-dark)' : 'var(--orange)'};">${totalBal >= 0 ? '+' : ''}${totalBal.toFixed(2)}</b></div>`;
+  container.innerHTML = html;
+}
+
+function addAccount() { showAccountModal(null); }
+function editAccount(id) { showAccountModal(id); }
+
+function deleteAccount(id) {
+  const acc = accounts.find(a => a.id === id);
+  if (!acc) return;
+  const usedBills = bills.filter(b => b.accountId === id || b.fromAccountId === id || b.toAccountId === id);
+  if (usedBills.length > 0) {
+    if (!confirm(`「${acc.name}」有 ${usedBills.length} 条关联账单，删除账户会同时清空关联数据，确定吗？🐱`)) return;
+    bills = bills.filter(b => b.accountId !== id && b.fromAccountId !== id && b.toAccountId !== id);
+    saveData();
+  }
+  if (accounts.length <= 1) { showToast('至少保留一个账户哦～ 🐱'); return; }
+  accounts = accounts.filter(a => a.id !== id);
+  saveAccounts();
+  renderAll();
+  renderAccountSelects();
+  showToast('账户已删除～');
+}
+
+function showAccountModal(editId) {
+  const acc = editId ? accounts.find(a => a.id === editId) : null;
+  const title = acc ? '✏️ 编辑账户' : '➕ 添加账户';
+  const nameVal = acc ? acc.name : '';
+  const iconVal = acc ? acc.icon : '💵';
+  const balVal = acc ? acc.initialBalance : '';
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+  const iconOptions = ['💵','🏦','💙','💚','💰','💳','🏠','🐱','⭐','💝','🎯','📱'];
+  let iconHTML = '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">';
+  iconOptions.forEach(ic => {
+    const sel = ic === iconVal ? 'border-color:var(--pink);background:var(--pink-light);' : '';
+    iconHTML += `<span style="font-size:24px;padding:8px;border-radius:12px;cursor:pointer;border:2px solid transparent;${sel}" onclick="this.closest('.modal-overlay').querySelector('#accIcon').value='${ic}';this.closest('.modal-overlay').querySelectorAll('.icon-opt').forEach(e=>e.style.borderColor='transparent');this.style.borderColor='var(--pink)';this.style.background='var(--pink-light)'" class="icon-opt">${ic}</span>`;
+  });
+  iconHTML += '</div>';
+  overlay.innerHTML = `
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <div class="modal-title">${title}</div>
+      <input type="hidden" id="accIcon" value="${iconVal}">
+      <div class="form-label">图标</div>${iconHTML}
+      <div class="form-group"><label class="form-label">账户名称</label><input type="text" class="form-input" id="accName" value="${escapeHtml(nameVal)}" placeholder="例如：现金、工资卡"></div>
+      <div class="form-group"><label class="form-label">初始余额</label><input type="number" class="form-input" id="accBalance" value="${balVal}" placeholder="0.00" step="0.01"></div>
+      <button class="btn btn-primary" id="saveAccountBtn">保存</button>
+    </div>`;
+  document.body.appendChild(overlay);
+  document.getElementById('saveAccountBtn').onclick = function() {
+    const name = document.getElementById('accName').value.trim();
+    const icon = document.getElementById('accIcon').value;
+    const balance = parseFloat(document.getElementById('accBalance').value) || 0;
+    if (!name) { showToast('请输入账户名称哦～ 🐱'); return; }
+    if (acc) { acc.name = name; acc.icon = icon; acc.initialBalance = balance; }
+    else { accounts.push({ id: 'a_' + Date.now(), name, icon, initialBalance: balance, createdAt: new Date().toISOString() }); }
+    saveAccounts();
+    overlay.remove();
+    renderAll();
+    renderAccountSelects();
+    showToast(acc ? '账户已更新！✏️' : '账户添加成功！➕');
+  };
 }
 
 // ============ Home Page ============
@@ -1194,12 +1592,13 @@ function renderHome() {
   const monthStart = now.startOf('month').format('YYYY-MM-DD');
   const monthEnd = now.endOf('month').format('YYYY-MM-DD');
 
-  const monthBills = bills.filter(b => b.date >= monthStart && b.date <= monthEnd);
+  // Exclude transfers from income/expense stats
+  const monthBills = bills.filter(b => b.date >= monthStart && b.date <= monthEnd && b.type !== 'transfer');
   const totalIncome = monthBills.filter(b => b.type === 'income').reduce((s, b) => s + b.amount, 0);
   const totalExpense = monthBills.filter(b => b.type === 'expense').reduce((s, b) => s + b.amount, 0);
   const balance = totalIncome - totalExpense;
+  const totalBal = getTotalBalance();
 
-  // Summary row
   document.getElementById('summaryRow').innerHTML = `
     <div class="summary-card income" onclick="switchTab('record')">
       <div class="summary-label">💰 本月收入</div>
@@ -1215,12 +1614,16 @@ function renderHome() {
         ${balance >= 0 ? '+' : ''}${balance.toFixed(2)}
       </div>
     </div>
+    <div class="summary-card" style="grid-column:1/-1;background:linear-gradient(135deg, #EDE0F5, var(--white));" onclick="switchTab('mine')">
+      <div class="summary-label">🏦 全部账户余额</div>
+      <div class="summary-amount" style="color:${totalBal >= 0 ? 'var(--mint-dark)' : 'var(--orange)'};font-size:22px;">
+        ${totalBal >= 0 ? '+' : ''}${totalBal.toFixed(2)}
+      </div>
+    </div>
   `;
 
-  // Budget preview
   renderBudgetPreview(totalExpense);
 
-  // Recent transactions (last 10)
   const recent = bills.slice(0, 10);
   document.getElementById('txnCount').textContent = `共 ${bills.length} 笔`;
   if (recent.length === 0) {
@@ -1230,7 +1633,7 @@ function renderHome() {
         <div class="empty-text">还没有账单记录哦～<br>点击下方 + 开始记账吧！</div>
       </div>`;
   } else {
-    document.getElementById('recentTxns').innerHTML = renderBillList(recent, true);
+    document.getElementById('recentTxns').innerHTML = renderBillList(recent, true, true);
   }
 }
 
@@ -1263,30 +1666,41 @@ function renderBudgetPreview(totalExpense) {
 }
 
 // ============ Bill List Renderer ============
-function renderBillList(list, showDelete) {
+function renderBillList(list, showEdit, showAccount) {
   if (!list.length) {
-    return `<div class="empty-state">
-      <div class="empty-icon">🔍</div>
-      <div class="empty-text">没有找到匹配的账单～</div>
-    </div>`;
+    return `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">没有找到匹配的账单～</div></div>`;
   }
   let html = '<div class="txn-list">';
   list.forEach(b => {
-    const catName = b.category.replace(/^[^\s]+\s/, '');
-    const icon = CATEGORY_ICONS[b.category] || (b.type === 'income' ? '💰' : '💸');
-    const sign = b.type === 'income' ? '+' : '-';
-    const cls = b.type === 'income' ? 'income' : 'expense';
-    const iconBg = b.type === 'income' ? 'income-bg' : 'expense-bg';
+    let icon, catName, sign, cls, iconBg;
+    if (b.type === 'transfer') {
+      icon = '💱'; catName = '转账'; sign = ''; cls = 'transfer'; iconBg = 'transfer-bg';
+      const fromAcc = accounts.find(a => a.id === b.fromAccountId);
+      const toAcc = accounts.find(a => a.id === b.toAccountId);
+      catName = (fromAcc ? fromAcc.name : '?') + ' → ' + (toAcc ? toAcc.name : '?');
+    } else {
+      catName = b.category.replace(/^[^\s]+\s/, '');
+      icon = CATEGORY_ICONS[b.category] || (b.type === 'income' ? '💰' : '💸');
+      sign = b.type === 'income' ? '+' : '-';
+      cls = b.type === 'income' ? 'income' : 'expense';
+      iconBg = b.type === 'income' ? 'income-bg' : 'expense-bg';
+    }
+    let accInfo = '';
+    if (showAccount && b.type !== 'transfer') {
+      const acc = accounts.find(a => a.id === b.accountId);
+      if (acc) accInfo = `<span style="font-size:11px;color:var(--text-lighter);">${acc.icon} ${acc.name}</span>`;
+    }
     html += `
-      <div class="txn-item">
+      <div class="txn-item ${b.type === 'transfer' ? 'transfer' : ''}" ${showEdit ? `onclick="editBill(${b.id})" style="cursor:pointer;"` : ''}>
         <div class="txn-icon ${iconBg}">${icon}</div>
         <div class="txn-info">
           <div class="txn-category">${catName}</div>
           ${b.note ? `<div class="txn-note">${escapeHtml(b.note)}</div>` : ''}
-          <div class="txn-date">${b.date}</div>
+          <div class="txn-date">${b.date}${accInfo ? ' · ' + accInfo : ''}</div>
         </div>
-        <div class="txn-amount ${cls}">${sign}${b.amount.toFixed(2)}</div>
-        ${showDelete ? `<span onclick="event.stopPropagation();deleteBill(${b.id})" style="cursor:pointer;font-size:18px;padding:4px;opacity:0.5;">🗑️</span>` : ''}
+        <div class="txn-amount ${cls}">${b.type === 'transfer' ? '' : sign}${b.amount.toFixed(2)}</div>
+        ${showEdit ? `<span onclick="event.stopPropagation();editBill(${b.id})" style="cursor:pointer;font-size:16px;padding:4px;opacity:0.5;" title="编辑">✏️</span>` : ''}
+        ${showEdit ? `<span onclick="event.stopPropagation();deleteBill(${b.id})" style="cursor:pointer;font-size:16px;padding:4px;opacity:0.5;" title="删除">🗑️</span>` : ''}
       </div>`;
   });
   html += '</div>';
@@ -1303,13 +1717,14 @@ function deleteBill(id) {
   if (confirm('确定要删除这笔账单吗？🐱')) {
     bills = bills.filter(b => b.id !== id);
     saveData();
+    if (editingBillId === id) cancelEdit();
     renderAll();
     showToast('已删除～');
   }
 }
 
 // ============ Stats Page ============
-let currentPeriod = 'month';
+let currentPeriod = 'week';
 
 function setupPeriodButtons() {
   document.querySelectorAll('#periodBtns .period-btn').forEach(btn => {
@@ -1325,6 +1740,9 @@ function setupPeriodButtons() {
 function getPeriodRange() {
   const now = getToday();
   switch(currentPeriod) {
+    case 'day':
+      const todayStr = now.format('YYYY-MM-DD');
+      return { start: todayStr, end: todayStr, label: '今日' };
     case 'week':
       return { start: now.startOf('week').format('YYYY-MM-DD'), end: now.endOf('week').format('YYYY-MM-DD'), label: '本周' };
     case 'month':
@@ -1336,7 +1754,7 @@ function getPeriodRange() {
 
 function renderStats() {
   const { start, end, label } = getPeriodRange();
-  const periodBills = bills.filter(b => b.date >= start && b.date <= end);
+  const periodBills = bills.filter(b => b.date >= start && b.date <= end && b.type !== 'transfer');
   const incomeTotal = periodBills.filter(b => b.type === 'income').reduce((s, b) => s + b.amount, 0);
   const expenseTotal = periodBills.filter(b => b.type === 'expense').reduce((s, b) => s + b.amount, 0);
 
@@ -1376,8 +1794,11 @@ function renderTrendChart(periodBills, start, end) {
   const e = dayjs(end);
   const days = e.diff(s, 'day') + 1;
 
-  if (currentPeriod === 'year') {
-    // Monthly aggregation
+  if (currentPeriod === 'day') {
+    labels = ['今日'];
+    incomeData = [periodBills.filter(b => b.type === 'income').reduce((s, b) => s + b.amount, 0)];
+    expenseData = [periodBills.filter(b => b.type === 'expense').reduce((s, b) => s + b.amount, 0)];
+  } else if (currentPeriod === 'year') {
     for (let m = 0; m < 12; m++) {
       const monthStart = s.add(m, 'month').format('YYYY-MM');
       labels.push((m + 1) + '月');
@@ -1505,6 +1926,7 @@ function renderCategoryChart(periodBills) {
 
 // ============ Mine Page ============
 function renderMine() {
+  renderAccountList();
   renderBudgetSection();
   searchBills();
 }
@@ -1512,10 +1934,12 @@ function renderMine() {
 function renderBudgetSection() {
   const budget = getBudget();
   document.getElementById('budgetInput').value = budget || '';
-  const monthBills = bills.filter(b => {
-    const now = getToday();
-    return b.date >= now.startOf('month').format('YYYY-MM-DD') && b.date <= now.endOf('month').format('YYYY-MM-DD');
-  });
+  const now = getToday();
+  const monthBills = bills.filter(b =>
+    b.date >= now.startOf('month').format('YYYY-MM-DD') &&
+    b.date <= now.endOf('month').format('YYYY-MM-DD') &&
+    b.type !== 'transfer'
+  );
   const totalExpense = monthBills.filter(b => b.type === 'expense').reduce((s, b) => s + b.amount, 0);
 
   if (budget) {
@@ -1545,6 +1969,7 @@ function searchBills() {
   // Filter by type
   if (searchFilter === 'expense') results = results.filter(b => b.type === 'expense');
   if (searchFilter === 'income') results = results.filter(b => b.type === 'income');
+  if (searchFilter === 'transfer') results = results.filter(b => b.type === 'transfer');
   if (searchFilter === 'month') {
     const now = getToday();
     results = results.filter(b =>
@@ -1565,12 +1990,18 @@ function searchBills() {
 
   const container = document.getElementById('searchResults');
   if (container) {
-    container.innerHTML = renderBillList(results, true);
+    container.innerHTML = renderBillList(results, true, true);
     if (results.length > 0) {
-      const total = results.reduce((s, b) => s + (b.type === 'income' ? b.amount : -b.amount), 0);
+      const incomeSum = results.filter(b => b.type === 'income').reduce((s, b) => s + b.amount, 0);
+      const expenseSum = results.filter(b => b.type === 'expense').reduce((s, b) => s + b.amount, 0);
+      const transferSum = results.filter(b => b.type === 'transfer').reduce((s, b) => s + b.amount, 0);
+      let summary = `共 ${results.length} 条`;
+      if (incomeSum) summary += ` · 收入 +${incomeSum.toFixed(2)}`;
+      if (expenseSum) summary += ` · 支出 -${expenseSum.toFixed(2)}`;
+      if (transferSum) summary += ` · 转账 ${transferSum.toFixed(2)}`;
       container.innerHTML += `
         <div style="text-align:center;margin-top:10px;padding:8px;background:var(--card);border-radius:20px;font-size:13px;color:var(--text-light);">
-          共 ${results.length} 条结果 · 合计 <span style="font-weight:700;color:${total >= 0 ? 'var(--mint-dark)' : 'var(--orange)'};">${total >= 0 ? '+' : ''}${total.toFixed(2)}</span>
+          ${summary}
         </div>`;
     }
   }
@@ -1583,7 +2014,8 @@ function checkBudgetAlert() {
   const now = getToday();
   const monthBills = bills.filter(b =>
     b.date >= now.startOf('month').format('YYYY-MM-DD') &&
-    b.date <= now.endOf('month').format('YYYY-MM-DD')
+    b.date <= now.endOf('month').format('YYYY-MM-DD') &&
+    b.type !== 'transfer'
   );
   const totalExpense = monthBills.filter(b => b.type === 'expense').reduce((s, b) => s + b.amount, 0);
   const pct = (totalExpense / budget) * 100;
@@ -1622,8 +2054,9 @@ function showBudgetAlert(pct, spent, budget) {
 function exportData() {
   const data = {
     bills: bills,
+    accounts: accounts,
     exportDate: getToday().format('YYYY-MM-DD HH:mm:ss'),
-    version: '1.0'
+    version: '2.0'
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -1636,13 +2069,16 @@ function exportData() {
 }
 
 function clearAllData() {
-  if (confirm('⚠️ 确定要清空所有记账数据吗？此操作不可恢复！')) {
+  if (confirm('⚠️ 确定要清空所有记账数据和账户吗？此操作不可恢复！')) {
     if (confirm('真的确定吗？建议先导出备份哦～ 🐱')) {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(ACCOUNT_KEY);
       bills = [];
-      saveData();
+      accounts = [];
+      initDefaultAccounts();
       renderAll();
-      showToast('数据已清空～');
+      renderAccountSelects();
+      showToast('数据已清空，账户已重置～');
     }
   }
 }
