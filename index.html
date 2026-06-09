@@ -891,41 +891,27 @@ body {
 
 /* ============ Custom Images ============ */
 .nav-icon-img {
-  width: 26px;
-  height: 26px;
-  object-fit: contain;
-  transition: transform 0.2s ease, filter 0.2s ease;
-  mix-blend-mode: multiply;
-  opacity: 0.85;
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 }
 .nav-item.active .nav-icon-img {
-  transform: scale(1.2);
-  mix-blend-mode: normal;
-  opacity: 1;
-  filter: drop-shadow(0 2px 6px rgba(255,170,180,0.6));
+  transform: scale(1.15);
+  box-shadow: 0 3px 12px rgba(255,180,200,0.5);
 }
 .nav-item:active .nav-icon-img { transform: scale(0.85); }
 
-.nav-item .nav-icon-wrap {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,200,216,0.2) 0%, transparent 70%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .nav-record-img {
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
   border-radius: 50%;
-  padding: 8px;
-  background: linear-gradient(135deg, rgba(255,200,216,0.6) 0%, rgba(255,180,200,0.4) 100%);
   box-shadow: 0 4px 20px rgba(255,180,200,0.5);
   animation: float 3s ease-in-out infinite;
-  mix-blend-mode: normal;
+  border: 3px solid white;
 }
 .nav-item.nav-record:active .nav-record-img {
   transform: scale(0.9);
@@ -938,9 +924,7 @@ body {
   object-fit: cover;
   border-radius: 50%;
   box-shadow: 0 3px 12px rgba(255,180,200,0.4);
-  background: linear-gradient(135deg, #FFF5F7, #FFE0E8);
-  padding: 2px;
-  border: 2px solid rgba(255,255,255,0.8);
+  border: 2px solid rgba(255,255,255,0.9);
 }
 
 /* ============ Floating Image Decorations ============ */
@@ -948,53 +932,54 @@ body {
   position: fixed;
   pointer-events: none;
   z-index: 0;
-  object-fit: contain;
-  mix-blend-mode: multiply;
+  border-radius: 50%;
+  overflow: hidden;
 }
 .floating-img img {
   width: 100%;
-  opacity: 0.1;
-  filter: blur(0.5px) saturate(0.7);
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.08;
+  filter: blur(1px) saturate(0.5);
 }
-.floating-img:nth-child(1) { top: 5%; left: 2%; width: 100px; animation: float 10s ease-in-out infinite; }
-.floating-img:nth-child(2) { top: 15%; right: 4%; width: 85px; animation: float 8s ease-in-out 1.5s infinite; }
+.floating-img:nth-child(1) { top: 5%; left: 2%; width: 110px; height: 110px; animation: float 10s ease-in-out infinite; }
+.floating-img:nth-child(2) { top: 15%; right: 4%; width: 90px; height: 90px; animation: float 8s ease-in-out 1.5s infinite; }
 
 /* ============ Empty State Image ============ */
 .empty-img {
   width: 100px;
   height: 100px;
-  object-fit: contain;
+  object-fit: cover;
+  border-radius: 50%;
   margin-bottom: 10px;
   animation: float 3.5s ease-in-out infinite;
-  opacity: 0.6;
-  mix-blend-mode: multiply;
-  filter: brightness(1.1);
+  opacity: 0.55;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
 }
 
 /* ============ Card Accent Images ============ */
 .card-accent-img {
   position: absolute;
-  width: 70px;
-  height: 70px;
-  object-fit: contain;
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 50%;
   opacity: 0.06;
   pointer-events: none;
-  mix-blend-mode: multiply;
-  filter: blur(1px);
+  filter: blur(1.5px);
 }
 .summary-card .card-accent-img {
-  top: -10px;
-  right: -10px;
+  top: -8px;
+  right: -8px;
 }
 
 /* ============ Image Blending Helpers ============ */
 .img-blend-soft {
-  mix-blend-mode: multiply;
-  opacity: 0.7;
-  filter: brightness(1.1) saturate(0.8);
+  opacity: 0.65;
+  filter: brightness(1.05);
 }
 .img-glow-pink {
-  filter: drop-shadow(0 0 8px rgba(255,200,216,0.5));
+  box-shadow: 0 0 12px rgba(255,200,216,0.4);
 }
 
 /* ============ XiaoHuo Butler ============ */
@@ -2267,8 +2252,8 @@ function showBudgetAlert(pct, spent, budget) {
         </div>
         <div style="font-size:14px;color:var(--text);line-height:1.6;text-align:left;">
           ${isOver
-            ? '别担心～偶尔超支也正常。重要的是知道钱花在了哪里，下次提前规划就好啦！我陪着你一起管理～ 💪'
-            : '预算用得有点快了哦～不过没关系，及时发现就能及时调整。要不要看看账单分析一下？ 📊'}
+            ? '公主别担心～偶尔超支也正常。小欣陪公主一起看看钱花在哪了，下个月提前规划就好啦！ 👑'
+            : '公主～预算用得有点快了哦。不过没关系，及时发现就能及时调整。公主要不要看看账单？ 📊'}
         </div>
       </div>
 
@@ -2336,16 +2321,16 @@ function clearAllData() {
 
 // ============ 小霍管家 ============
 const BUTLER_TIPS = [
-  '记得每天记账哦～ 💪',
-  '省下来的钱就是赚到的！✨',
-  '今天又比昨天更棒了呢～ 🌟',
-  '小欣会一直陪着你的～ 🐱',
-  '控制预算，做金钱的主人！🎯',
-  '坚持记账是变富的第一步～ 💰',
-  '每一笔小支出都值得记录 📝',
-  '看看统计图，成就感满满！📊',
-  '月底复盘会发现惊喜哦～ 🎉',
-  '合理消费，快乐生活～ 🌸'
+  '公主今天记账了吗～ 💪',
+  '省下的钱就是公主的宝藏！✨',
+  '公主今天又比昨天更美了呢～ 🌟',
+  '小欣会一直陪着公主的～ 👑',
+  '公主是金钱的主人！🎯',
+  '坚持记账，公主会越来越富～ 💰',
+  '公主的每一笔都值得记录 📝',
+  '公主看看统计图，超有成就感！📊',
+  '月底复盘，公主会发现惊喜～ 🎉',
+  '公主理性消费，快乐生活～ 🌸'
 ];
 
 function showButlerTip() {
