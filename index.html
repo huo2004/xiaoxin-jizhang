@@ -83,17 +83,7 @@ body {
   gap: 10px;
 }
 
-.header-icon {
-  width: 40px;
-  height: 40px;
-  background: var(--white);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
+.header-icon { display: none; }
 
 .header-title {
   font-family: 'Quicksand', '萌趣圆体', '汉仪圆叠', sans-serif;
@@ -196,21 +186,15 @@ body {
   margin-top: -20px;
 }
 
-.nav-item.nav-record .nav-icon-wrap {
-  width: 52px;
-  height: 52px;
+.nav-item.nav-record .nav-record-img {
   background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%);
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
+  padding: 8px;
   box-shadow: 0 4px 16px rgba(255,200,216,0.5);
   transition: all 0.2s ease;
-  animation: float 3s ease-in-out infinite;
 }
 
-.nav-item.nav-record:active .nav-icon-wrap {
+.nav-item.nav-record:active .nav-record-img {
   transform: scale(0.9);
   box-shadow: 0 2px 8px rgba(255,200,216,0.3);
 }
@@ -661,29 +645,6 @@ body {
   flex: 1;
 }
 
-/* ============ Decorative Elements ============ */
-.deco-clouds {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.04;
-}
-
-.deco-cloud {
-  position: absolute;
-  font-size: 60px;
-}
-
-.deco-cloud:nth-child(1) { top: 8%; left: 5%; animation: float 8s ease-in-out infinite; }
-.deco-cloud:nth-child(2) { top: 15%; right: 8%; font-size: 40px; animation: float 7s ease-in-out 1s infinite; }
-.deco-cloud:nth-child(3) { top: 60%; left: 3%; font-size: 50px; animation: float 9s ease-in-out 2s infinite; }
-.deco-cloud:nth-child(4) { top: 70%; right: 5%; font-size: 35px; animation: float 6s ease-in-out 3s infinite; }
-.deco-cloud:nth-child(5) { top: 40%; left: 80%; font-size: 30px; animation: float 7.5s ease-in-out 1.5s infinite; }
-
 /* ============ Empty State ============ */
 .empty-state {
   text-align: center;
@@ -928,6 +889,186 @@ body {
   background: #EDE0F5;
 }
 
+/* ============ Custom Images ============ */
+.nav-icon-img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+.nav-item.active .nav-icon-img {
+  transform: scale(1.2);
+  filter: drop-shadow(0 2px 4px rgba(255,200,216,0.5));
+}
+.nav-item:active .nav-icon-img { transform: scale(0.85); }
+
+.nav-record-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 4px 10px rgba(255,200,216,0.5));
+}
+
+.header-logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  background: var(--white);
+}
+
+/* ============ Floating Image Decorations ============ */
+.floating-img {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+  object-fit: contain;
+}
+.floating-img:nth-child(1) { top: 6%; left: 3%; width: 90px; animation: float 8s ease-in-out infinite; }
+.floating-img:nth-child(2) { top: 18%; right: 5%; width: 70px; animation: float 7s ease-in-out 1.5s infinite; }
+.floating-img:nth-child(3) { top: 55%; left: 4%; width: 80px; animation: float 9s ease-in-out 3s infinite; }
+.floating-img:nth-child(4) { top: 72%; right: 6%; width: 65px; animation: float 6.5s ease-in-out 2s infinite; }
+
+/* ============ Empty State Image ============ */
+.empty-img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
+  animation: float 3.5s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+/* ============ Card Accent Images ============ */
+.card-accent-img {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  opacity: 0.08;
+  pointer-events: none;
+}
+.summary-card .card-accent-img {
+  top: -10px;
+  right: -10px;
+}
+
+/* ============ XiaoHuo Butler ============ */
+.butler-widget {
+  position: fixed;
+  bottom: calc(var(--nav-height) + var(--safe-bottom) + 24px);
+  right: 16px;
+  z-index: 150;
+  cursor: pointer;
+  transition: transform 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.butler-widget:active { transform: scale(0.9); }
+
+.butler-bubble {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 0 4px 20px rgba(255,200,216,0.4);
+  overflow: hidden;
+  animation: butlerFloat 3s ease-in-out infinite;
+  position: relative;
+}
+.butler-bubble img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes butlerFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(-2deg); }
+  75% { transform: translateY(-3px) rotate(2deg); }
+}
+
+.butler-tip {
+  position: absolute;
+  bottom: 64px;
+  right: -10px;
+  background: var(--white);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 20px 20px 4px 20px;
+  box-shadow: var(--shadow-lg);
+  white-space: nowrap;
+  max-width: 200px;
+  animation: popIn 0.3s ease;
+  display: none;
+}
+.butler-tip.show { display: block; }
+
+.butler-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  background: #FF6B8A;
+  border-radius: 50%;
+  border: 2px solid white;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+/* ============ Butler Praise Overlay ============ */
+.butler-praise {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: praiseIn 0.5s ease, praiseOut 0.5s ease 1.8s forwards;
+}
+.butler-praise-content {
+  text-align: center;
+}
+.butler-praise-img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  animation: butlerBounce 0.6s ease-in-out 2;
+  filter: drop-shadow(0 8px 24px rgba(255,200,216,0.6));
+}
+.butler-praise-text {
+  font-family: 'Quicksand', '萌趣圆体', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--pink-dark);
+  margin-top: 8px;
+  animation: popIn 0.4s ease 0.3s both;
+}
+
+@keyframes praiseIn {
+  from { opacity: 0; backdrop-filter: blur(0); }
+  to { opacity: 1; backdrop-filter: blur(8px); background: rgba(255,250,245,0.6); }
+}
+@keyframes praiseOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes butlerBounce {
+  0%, 100% { transform: scale(1); }
+  30% { transform: scale(1.15); }
+  60% { transform: scale(0.95); }
+}
+
 /* ============ Responsive ============ */
 @media (min-width: 481px) {
   body {
@@ -939,14 +1080,9 @@ body {
 </head>
 <body>
 
-<!-- Decorative Clouds -->
-<div class="deco-clouds">
-  <span class="deco-cloud">☁️</span>
-  <span class="deco-cloud">☁️</span>
-  <span class="deco-cloud">☁️</span>
-  <span class="deco-cloud">☁️</span>
-  <span class="deco-cloud">☁️</span>
-</div>
+<!-- Decorative Images -->
+<div class="floating-img" style="top:6%;left:3%;width:90px;"><img src="image/deco-float-1.jpg" alt="" style="width:100%;opacity:0.7;"></div>
+<div class="floating-img" style="top:18%;right:5%;width:70px;"><img src="image/deco-float-2.jpg" alt="" style="width:100%;opacity:0.7;"></div>
 
 <!-- App -->
 <div id="app">
@@ -954,13 +1090,13 @@ body {
   <!-- Header -->
   <header class="app-header">
     <div class="header-left">
-      <div class="header-icon">🐱</div>
+      <img src="image/header-logo.jpg" alt="小欣" class="header-logo-img">
       <div>
         <div class="header-title">小欣记账本</div>
         <div class="header-date" id="headerDate"></div>
       </div>
     </div>
-    <span style="font-size:28px;">💰</span>
+    <img src="image/deco-record.jpg" alt="" style="width:36px;height:36px;object-fit:contain;opacity:0.9;">
   </header>
 
   <!-- ========== Home Page ========== -->
@@ -1121,26 +1257,35 @@ body {
 <!-- Bottom Navigation -->
 <nav class="bottom-nav">
   <div class="nav-item active" data-tab="home" onclick="switchTab('home')">
-    <span class="nav-icon">🏠</span>
+    <img src="image/nav-home.jpg" alt="首页" class="nav-icon-img">
     <span class="nav-label">首页</span>
   </div>
   <div class="nav-item" data-tab="stats" onclick="switchTab('stats')">
-    <span class="nav-icon">📊</span>
+    <img src="image/nav-stats.jpg" alt="统计" class="nav-icon-img">
     <span class="nav-label">统计</span>
   </div>
   <div class="nav-item nav-record" data-tab="record" onclick="switchTab('record')">
-    <div class="nav-icon-wrap">✏️</div>
+    <img src="image/nav-record.jpg" alt="记账" class="nav-record-img">
     <span class="nav-label" style="margin-top:2px;">记账</span>
   </div>
   <div class="nav-item" data-tab="mine" onclick="switchTab('mine')">
-    <span class="nav-icon">🎯</span>
+    <img src="image/nav-budget.jpg" alt="预算" class="nav-icon-img">
     <span class="nav-label">预算</span>
   </div>
   <div class="nav-item" data-tab="mine" onclick="switchTab('mine')">
-    <span class="nav-icon">👤</span>
+    <img src="image/nav-mine.jpg" alt="我的" class="nav-icon-img">
     <span class="nav-label">我的</span>
   </div>
 </nav>
+
+<!-- 小霍管家 -->
+<div class="butler-widget" id="butlerWidget" onclick="showButlerTip()">
+  <div class="butler-bubble">
+    <img src="image/butler.jpg" alt="小霍管家">
+    <div class="butler-dot"></div>
+  </div>
+  <div class="butler-tip" id="butlerTip"></div>
+</div>
 
 <!-- Toast Container -->
 <div id="toastContainer"></div>
@@ -1440,6 +1585,9 @@ function saveRecord() {
   renderAccountSelects();
   renderAll();
   checkBudgetAlert();
+
+  // 管家表扬动画
+  showButlerPraise(billData.type, billData.amount);
 }
 
 // ============ Edit Bill ============
@@ -1600,11 +1748,13 @@ function renderHome() {
   const totalBal = getTotalBalance();
 
   document.getElementById('summaryRow').innerHTML = `
-    <div class="summary-card income" onclick="switchTab('record')">
+    <div class="summary-card income" onclick="switchTab('record')" style="position:relative;overflow:hidden;">
+      <img src="image/accent-income.jpg" alt="" class="card-accent-img" style="top:-15px;right:-15px;width:80px;height:80px;">
       <div class="summary-label">💰 本月收入</div>
       <div class="summary-amount income">+${totalIncome.toFixed(2)}</div>
     </div>
-    <div class="summary-card expense" onclick="switchTab('record')">
+    <div class="summary-card expense" onclick="switchTab('record')" style="position:relative;overflow:hidden;">
+      <img src="image/accent-expense.jpg" alt="" class="card-accent-img" style="top:-15px;right:-15px;width:80px;height:80px;">
       <div class="summary-label">💸 本月支出</div>
       <div class="summary-amount expense">-${totalExpense.toFixed(2)}</div>
     </div>
@@ -1629,7 +1779,7 @@ function renderHome() {
   if (recent.length === 0) {
     document.getElementById('recentTxns').innerHTML = `
       <div class="empty-state">
-        <div class="empty-icon">🐱</div>
+        <img src="image/empty-bills.jpg" alt="" class="empty-img">
         <div class="empty-text">还没有账单记录哦～<br>点击下方 + 开始记账吧！</div>
       </div>`;
   } else {
@@ -1668,7 +1818,7 @@ function renderBudgetPreview(totalExpense) {
 // ============ Bill List Renderer ============
 function renderBillList(list, showEdit, showAccount) {
   if (!list.length) {
-    return `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">没有找到匹配的账单～</div></div>`;
+    return `<div class="empty-state"><img src="image/empty-search.jpg" alt="" class="empty-img"><div class="empty-text">没有找到匹配的账单～</div></div>`;
   }
   let html = '<div class="txn-list">';
   list.forEach(b => {
@@ -2043,7 +2193,7 @@ function showBudgetAlert(pct, spent, budget) {
   overlay.innerHTML = `
     <div class="modal-sheet" onclick="event.stopPropagation()">
       <div class="modal-handle"></div>
-      <div class="alert-pig">${emoji}</div>
+      <img src="image/alert-budget.jpg" alt="" style="width:90px;height:90px;object-fit:contain;display:block;margin:0 auto;animation:wiggle 0.5s ease-in-out 3;">
       <div class="alert-message">${msg}</div>
       <button class="btn btn-primary" onclick="this.closest('.modal-overlay').remove()">我知道了 💪</button>
     </div>`;
@@ -2082,6 +2232,58 @@ function clearAllData() {
     }
   }
 }
+
+// ============ 小霍管家 ============
+const BUTLER_TIPS = [
+  '记得每天记账哦～ 💪',
+  '省下来的钱就是赚到的！✨',
+  '今天又比昨天更棒了呢～ 🌟',
+  '小欣会一直陪着你的～ 🐱',
+  '控制预算，做金钱的主人！🎯',
+  '坚持记账是变富的第一步～ 💰',
+  '每一笔小支出都值得记录 📝',
+  '看看统计图，成就感满满！📊',
+  '月底复盘会发现惊喜哦～ 🎉',
+  '合理消费，快乐生活～ 🌸'
+];
+
+function showButlerTip() {
+  const tip = document.getElementById('butlerTip');
+  const idx = Math.floor(Math.random() * BUTLER_TIPS.length);
+  tip.textContent = BUTLER_TIPS[idx];
+  tip.classList.add('show');
+  setTimeout(() => tip.classList.remove('show'), 2500);
+}
+
+function showButlerPraise(type, amount) {
+  const praises = type === 'income'
+    ? [`又进账 ${amount.toFixed(2)}！太棒了！🎉`, `收入 +${amount.toFixed(2)}，继续加油！🌟`, `赚钱小能手！💰`]
+    : type === 'expense'
+    ? [`已记录支出 ${amount.toFixed(2)}，精打细算！💪`, `消费 ${amount.toFixed(2)}，理性消费很棒哦～`, `记账让我更懂生活 📝`]
+    : [`转账 ${amount.toFixed(2)} 成功！✨`, `资金已转移，账户清晰明了～`, `转一转，钱不乱 💱`];
+
+  const text = praises[Math.floor(Math.random() * praises.length)];
+  const overlay = document.createElement('div');
+  overlay.className = 'butler-praise';
+  overlay.innerHTML = `
+    <div class="butler-praise-content">
+      <img src="image/butler.jpg" alt="" class="butler-praise-img">
+      <div class="butler-praise-text">${text}</div>
+    </div>`;
+  document.body.appendChild(overlay);
+  setTimeout(() => overlay.remove(), 2500);
+}
+
+// Auto-show butler tip periodically
+setInterval(() => {
+  const tip = document.getElementById('butlerTip');
+  if (!tip.classList.contains('show')) {
+    const idx = Math.floor(Math.random() * BUTLER_TIPS.length);
+    tip.textContent = BUTLER_TIPS[idx];
+    tip.classList.add('show');
+    setTimeout(() => tip.classList.remove('show'), 2500);
+  }
+}, 60000);
 
 // ============ Toast ============
 function showToast(msg) {
