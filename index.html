@@ -2236,7 +2236,7 @@ function showBudgetAlert(pct, spent, budget) {
       </div>
 
       <div style="font-family:'Quicksand','萌趣圆体',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;">
-        小霍提醒 ⚠️
+        👑 小霍提醒
       </div>
 
       <div style="font-size:14px;color:var(--text-light);line-height:1.7;margin-bottom:12px;">
@@ -2336,24 +2336,25 @@ const BUTLER_TIPS = [
 function showButlerTip() {
   const tip = document.getElementById('butlerTip');
   const idx = Math.floor(Math.random() * BUTLER_TIPS.length);
-  tip.textContent = BUTLER_TIPS[idx];
+  tip.textContent = '👑 小霍提醒：' + BUTLER_TIPS[idx];
   tip.classList.add('show');
   setTimeout(() => tip.classList.remove('show'), 2500);
 }
 
 function showButlerPraise(type, amount) {
   const praises = type === 'income'
-    ? [`又进账 ${amount.toFixed(2)}！太棒了！🎉`, `收入 +${amount.toFixed(2)}，继续加油！🌟`, `赚钱小能手！💰`]
+    ? [`公主又进账 ${amount.toFixed(2)}！太棒了！🎉`, `公主收入 +${amount.toFixed(2)}，继续加油！🌟`, `公主是赚钱小能手！💰`]
     : type === 'expense'
-    ? [`已记录支出 ${amount.toFixed(2)}，精打细算！💪`, `消费 ${amount.toFixed(2)}，理性消费很棒哦～`, `记账让我更懂生活 📝`]
-    : [`转账 ${amount.toFixed(2)} 成功！✨`, `资金已转移，账户清晰明了～`, `转一转，钱不乱 💱`];
+    ? [`公主已记录支出 ${amount.toFixed(2)}，精打细算！💪`, `公主消费 ${amount.toFixed(2)}，理性消费很棒哦～`, `公主的每一笔都有意义 📝`]
+    : [`公主转账 ${amount.toFixed(2)} 成功！✨`, `公主资金已转移，账户清晰明了～`, `公主的钱不乱 💱`];
 
   const text = praises[Math.floor(Math.random() * praises.length)];
   const overlay = document.createElement('div');
   overlay.className = 'butler-praise';
   overlay.innerHTML = `
     <div class="butler-praise-content">
-      <img src="image/butler.jpg" alt="" class="butler-praise-img">
+      <img src="image/butler.jpg" alt="小霍管家" class="butler-praise-img">
+      <div style="font-family:'Quicksand','萌趣圆体',sans-serif;font-size:14px;font-weight:700;color:var(--pink-dark);margin-bottom:4px;">👑 小霍提醒</div>
       <div class="butler-praise-text">${text}</div>
     </div>`;
   document.body.appendChild(overlay);
@@ -2365,7 +2366,7 @@ setInterval(() => {
   const tip = document.getElementById('butlerTip');
   if (!tip.classList.contains('show')) {
     const idx = Math.floor(Math.random() * BUTLER_TIPS.length);
-    tip.textContent = BUTLER_TIPS[idx];
+    tip.textContent = '👑 小霍提醒：' + BUTLER_TIPS[idx];
     tip.classList.add('show');
     setTimeout(() => tip.classList.remove('show'), 2500);
   }
