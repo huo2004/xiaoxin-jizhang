@@ -895,28 +895,52 @@ body {
   height: 26px;
   object-fit: contain;
   transition: transform 0.2s ease, filter 0.2s ease;
+  mix-blend-mode: multiply;
+  opacity: 0.85;
 }
 .nav-item.active .nav-icon-img {
   transform: scale(1.2);
-  filter: drop-shadow(0 2px 4px rgba(255,200,216,0.5));
+  mix-blend-mode: normal;
+  opacity: 1;
+  filter: drop-shadow(0 2px 6px rgba(255,170,180,0.6));
 }
 .nav-item:active .nav-icon-img { transform: scale(0.85); }
+
+.nav-item .nav-icon-wrap {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,200,216,0.2) 0%, transparent 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .nav-record-img {
   width: 44px;
   height: 44px;
   object-fit: contain;
+  border-radius: 50%;
+  padding: 8px;
+  background: linear-gradient(135deg, rgba(255,200,216,0.6) 0%, rgba(255,180,200,0.4) 100%);
+  box-shadow: 0 4px 20px rgba(255,180,200,0.5);
   animation: float 3s ease-in-out infinite;
-  filter: drop-shadow(0 4px 10px rgba(255,200,216,0.5));
+  mix-blend-mode: normal;
+}
+.nav-item.nav-record:active .nav-record-img {
+  transform: scale(0.9);
+  box-shadow: 0 2px 8px rgba(255,200,216,0.3);
 }
 
 .header-logo-img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
   border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  background: var(--white);
+  box-shadow: 0 3px 12px rgba(255,180,200,0.4);
+  background: linear-gradient(135deg, #FFF5F7, #FFE0E8);
+  padding: 2px;
+  border: 2px solid rgba(255,255,255,0.8);
 }
 
 /* ============ Floating Image Decorations ============ */
@@ -924,13 +948,16 @@ body {
   position: fixed;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.12;
   object-fit: contain;
+  mix-blend-mode: multiply;
 }
-.floating-img:nth-child(1) { top: 6%; left: 3%; width: 90px; animation: float 8s ease-in-out infinite; }
-.floating-img:nth-child(2) { top: 18%; right: 5%; width: 70px; animation: float 7s ease-in-out 1.5s infinite; }
-.floating-img:nth-child(3) { top: 55%; left: 4%; width: 80px; animation: float 9s ease-in-out 3s infinite; }
-.floating-img:nth-child(4) { top: 72%; right: 6%; width: 65px; animation: float 6.5s ease-in-out 2s infinite; }
+.floating-img img {
+  width: 100%;
+  opacity: 0.1;
+  filter: blur(0.5px) saturate(0.7);
+}
+.floating-img:nth-child(1) { top: 5%; left: 2%; width: 100px; animation: float 10s ease-in-out infinite; }
+.floating-img:nth-child(2) { top: 15%; right: 4%; width: 85px; animation: float 8s ease-in-out 1.5s infinite; }
 
 /* ============ Empty State Image ============ */
 .empty-img {
@@ -939,21 +966,35 @@ body {
   object-fit: contain;
   margin-bottom: 10px;
   animation: float 3.5s ease-in-out infinite;
-  opacity: 0.7;
+  opacity: 0.6;
+  mix-blend-mode: multiply;
+  filter: brightness(1.1);
 }
 
 /* ============ Card Accent Images ============ */
 .card-accent-img {
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   object-fit: contain;
-  opacity: 0.08;
+  opacity: 0.06;
   pointer-events: none;
+  mix-blend-mode: multiply;
+  filter: blur(1px);
 }
 .summary-card .card-accent-img {
   top: -10px;
   right: -10px;
+}
+
+/* ============ Image Blending Helpers ============ */
+.img-blend-soft {
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+  filter: brightness(1.1) saturate(0.8);
+}
+.img-glow-pink {
+  filter: drop-shadow(0 0 8px rgba(255,200,216,0.5));
 }
 
 /* ============ XiaoHuo Butler ============ */
@@ -972,16 +1013,19 @@ body {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--white);
-  box-shadow: 0 4px 20px rgba(255,200,216,0.4);
+  background: radial-gradient(circle, rgba(255,240,245,0.95) 0%, rgba(255,220,230,0.8) 100%);
+  box-shadow: 0 4px 24px rgba(255,180,200,0.5), 0 0 0 3px rgba(255,255,255,0.6);
   overflow: hidden;
   animation: butlerFloat 3s ease-in-out infinite;
   position: relative;
+  backdrop-filter: blur(4px);
 }
 .butler-bubble img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  mix-blend-mode: multiply;
+  opacity: 0.9;
 }
 
 @keyframes butlerFloat {
@@ -1090,7 +1134,7 @@ body {
   <!-- Header -->
   <header class="app-header">
     <div class="header-left">
-      <img src="image/header-logo.jpg" alt="小欣" class="header-logo-img">
+      <img src="image/butler.jpg" alt="小欣" class="header-logo-img">
       <div>
         <div class="header-title">小欣记账本</div>
         <div class="header-date" id="headerDate"></div>
